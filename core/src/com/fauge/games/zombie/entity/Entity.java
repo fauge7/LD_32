@@ -33,8 +33,10 @@ public class Entity {
 		posX = body.getPosition().x;
 		posY = body.getPosition().y;
 		if(HP <=0){
-			Alive = false;
-			Player.score+=10;
+			if(Alive){
+				Player.score+=10;
+				Alive = false;
+			}
 		}
 	}
 	public void hit(float damageToDO) {

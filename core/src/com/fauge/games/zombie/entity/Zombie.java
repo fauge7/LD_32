@@ -1,11 +1,17 @@
 package com.fauge.games.zombie.entity;
 
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
+import box2dLight.Spinor;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -21,7 +27,9 @@ public class Zombie extends Entity{
 	static Animation walkingLeftAnimation;
 	Direction direction;
 	float animTime = 0;
-	public Zombie(float X, float Y,Player p) {
+	PointLight eye1;
+	PointLight eye2;
+	public Zombie(float X, float Y,Player p, RayHandler rayHandler) {
 		super(X/GameScreen.PIXELS_IN_A_METER, Y/GameScreen.PIXELS_IN_A_METER, 50, 5);
 		// TODO Auto-generated constructor stub
 		tex = new Texture("zombie_front.png");
@@ -40,6 +48,9 @@ public class Zombie extends Entity{
 			direction = Direction.LEFT;
 		else
 			direction = Direction.RIGHT;
+		eye1 = new PointLight(rayHandler, 64, Color.RED, 20, X, Y);
+		eye1.setSoft(false);
+//		eye2 = new PointLight(rayHandler, 32, Color.RED, 6, X+2, Y);
 	}
 	public void initBox2D(World world){
 		BodyDef bdef = new BodyDef();
@@ -85,5 +96,10 @@ public class Zombie extends Entity{
 			direction = Direction.STILL;
 			body.setUserData(this);
 		}
+		eye1.setPosition(posX * GameScreen.PIXELS_IN_A_METER, posY * GameScreen.PIXELS_IN_A_METER + 8);
+		eye1.setDistance(10f);
+		eye1.update();
+//		eye2.setPosition(posX * GameScreen.PIXELS_IN_A_METER, posY * GameScreen.PIXELS_IN_A_METER);
+//		eye2.update();
 	}
 }

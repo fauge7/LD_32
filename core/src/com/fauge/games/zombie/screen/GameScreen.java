@@ -44,6 +44,7 @@ public class GameScreen implements Screen {
 	public static final float PIXELS_IN_A_METER = 50;
 	public static float camX;
 	public static float camY;
+	public static FontUtility fontUtility;
 	OrthographicCamera cam;
 	Viewport view;
 	SpriteBatch batch;
@@ -58,12 +59,16 @@ public class GameScreen implements Screen {
 	RayHandler rayHandler; 
 	ConeLight light;
 	Array<StreetLight> streetLightArray;
+	Array<Zombie> ZombieArray;
+	
 	StreetLight streetLight;
 	Zombie zombie;
 	ListenerClass ContactListenerObject;
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
+		fontUtility = new FontUtility();
+		fontUtility.setFont(Color.GRAY, 45);
 		cam = new OrthographicCamera(720, 480);
 		camX = 720/2;
 		camY = 480/2;
@@ -73,6 +78,7 @@ public class GameScreen implements Screen {
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(cam.combined);
 		bg = new Texture("background.png");
+//		box2d stuff
 		world = new World(new Vector2(0, -10.0f),true);
 		rayHandler = new RayHandler(world);
 		BodyDef Ground = new BodyDef();
@@ -82,23 +88,29 @@ public class GameScreen implements Screen {
 		EdgeShape groundshape = new EdgeShape();
 		groundshape.set(-100, -13, 100, -13);
 		GroundBody.createFixture(groundshape, 1);
-		player = new Player(720/2, 155);
+//		player stuff
+		player = new Player(720/2, 155,rayHandler);
 		player.initBox2D(world);
 		bodyArray = new Array<Body>();
 		b2drend = new Box2DDebugRenderer();
 		drawable = new TiledDrawable(new TextureRegion(bg));
 		throwableWeaponArray = new Array<ThrowableWeapon>();
 		pointLightArray = new Array<PointLight>();
-		rayHandler.setAmbientLight(.3f);
-		for(int i = -5000;i < 5000; i+=250){
+		ZombieArray = new Array<Zombie>();
+		rayHandler.setAmbientLight(.15f);
+		//placing street lights
+		for(int i = -3000;i < 3000; i+=500){
 			streetLight = new StreetLight(i, 165, false);
 			streetLight.initBox2D(world);
-			light = new ConeLight(rayHandler, 256, Color.YELLOW, 180, i, 200, 270, 35);
+			light = new ConeLight(rayHandler, 256, Color.YELLOW, 210, i, 200, 270, 45);
 			light.setXray(true);
 			light.setStaticLight(true);
 		}
-		zombie = new Zombie(780/2, 155, player);
-		zombie.initBox2D(world);
+		for(int i = -5000;i < 5000; i+=350){
+			Zombie toBeAdded = new Zombie(i, 155, player,rayHandler);
+			toBeAdded.initBox2D(world);
+			ZombieArray.add(toBeAdded);
+		}
 		ContactListenerObject = new ListenerClass();
 		world.setContactListener(ContactListenerObject);
 	}
@@ -106,6 +118,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
+		rayHandler.setAmbientLight(.05f);
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		player.update();
@@ -147,11 +160,11 @@ public class GameScreen implements Screen {
 					float throwX = 0;
 					if(Player.directionState == Direction.LEFT){
 						throwX = MathUtils.random(-5.0f, -3.0f);
-						pointLightArray.add(new PointLight(rayHandler,256,Color.GRAY,10,camX,480/2));
+						pointLightArray.add(new PointLight(rayHandler,64,Color.GRAY,10,camX,480/2));
 					}
 					else if(Player.directionState == Direction.RIGHT){
 						throwX = MathUtils.random(3.0f, 5.0f);
-						pointLightArray.add(new PointLight(rayHandler,256,Color.GRAY,10,camX,480/2));
+						pointLightArray.add(new PointLight(rayHandler,64,Color.GRAY,10,camX,480/2));
 					}
 					else
 						skip = true;
@@ -173,7 +186,9 @@ public class GameScreen implements Screen {
 		drawable.draw(batch, -720*5, 0, 720*10, 480);
 		rayHandler.setCombinedMatrix(cam.combined);
 		
-		zombie.update(player);
+		for(Zombie z : ZombieArray){
+			z.update(player);
+		}
 		for(Body b : bodyArray){
 			if(b.getFixtureList().get(0).getUserData() != null){
 				Entity ent = (Entity) b.getFixtureList().get(0).getUserData();
@@ -195,13 +210,27 @@ public class GameScreen implements Screen {
 		batch.end();
 		bodyArray.clear();
 		rayHandler.updateAndRender();
+		//drawing text
+		batch.begin();
+		if(!player.Alive){
+			fontUtility.setColor(Color.RED);
+			fontUtility.draw(batch, "Game Over", camX-fontUtility.getBounds("Game Over").width/2, view.getWorldHeight()/2);
+			fontUtility.setColor(Color.WHITE);
+			fontUtility.draw(batch, "Final score: " + Player.score, camX-fontUtility.getBounds("Final score: " + Player.score).width/2, view.getWorldHeight()/2-45);
+		}
+		else{
+			fontUtility.setColor(Color.WHITE);
+			fontUtility.draw(batch, "Score: " + Player.score, camX-view.getWorldWidth()/2+20, view.getWorldHeight()-20);
+			fontUtility.draw(batch, "HP:" + player.HP, camX+view.getWorldWidth()/2-20-fontUtility.getBounds("HP:" + player.HP).width, view.getWorldHeight()-20);
+		}
+		batch.end();
 //		b2drend.render(world, cam.combined);
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
-		view.update(width, height);
+		view.update(width, height,true);
 	}
 
 	@Override
