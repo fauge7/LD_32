@@ -19,7 +19,7 @@ public class Bicycle extends MeleeWeapon{
 	public void initBox2D(World world){
 		BodyDef bdef = new BodyDef();
 		bdef.position.set(posX, posY);
-		bdef.type = BodyType.KinematicBody;
+		bdef.type = BodyType.StaticBody;
 		body = world.createBody(bdef);
 		PolygonShape shape = new PolygonShape();
 		shape.setAsBox(32f/GameScreen.PIXELS_IN_A_METER, 16/GameScreen.PIXELS_IN_A_METER);

@@ -14,6 +14,7 @@ public class Entity {
 	public Body body;
 	public float HP;
 	public float damage;
+	public int ID;
 	public boolean Alive = true;
 	public Entity(float X, float Y, float HP, float damage) {
 		// TODO Auto-generated constructor stub

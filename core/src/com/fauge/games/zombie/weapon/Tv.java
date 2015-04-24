@@ -19,7 +19,7 @@ public class Tv extends MeleeWeapon{
 	public void initBox2D(World world){
 		BodyDef bdef = new BodyDef();
 		bdef.position.set(posX, posY);
-		bdef.type = BodyType.KinematicBody;
+		bdef.type = BodyType.StaticBody;
 		body = world.createBody(bdef);
 		PolygonShape shape = new PolygonShape();
 		shape.setAsBox(3.5f/GameScreen.PIXELS_IN_A_METER, 8/GameScreen.PIXELS_IN_A_METER);

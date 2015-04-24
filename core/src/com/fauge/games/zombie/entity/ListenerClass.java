@@ -14,7 +14,8 @@ public class ListenerClass implements ContactListener {
 		Entity entB = (Entity) contact.getFixtureB().getUserData();
 		
 		if(entA != null && entB != null){
-			if(entA.Alive &&  entB.Alive){
+			if(entA.ID + entB.ID < 2 ){	}
+			else if(entA.Alive &&  entB.Alive){
 				entA.hit(entB.damage);
 				entB.hit(entA.damage);	
 			}

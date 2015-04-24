@@ -2,5 +2,5 @@ package com.fauge.games.zombie.entity;
 
 public enum WeaponState {
 
-	BICYCLE,CONE,REMOTE,TEDDYBEAR,TV,NONE
+	NONE,TEDDYBEAR,REMOTE,BICYCLE,CONE,TV
 }

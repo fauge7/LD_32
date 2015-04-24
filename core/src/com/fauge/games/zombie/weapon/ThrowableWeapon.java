@@ -7,6 +7,7 @@ public class ThrowableWeapon extends Entity{
 	public ThrowableWeapon(float X, float Y, float damage) {
 		super(X, Y, 1, damage);
 		// TODO Auto-generated constructor stub
+		ID = 1;
 	}
 	public void update(){
 		posX = body.getPosition().x;
