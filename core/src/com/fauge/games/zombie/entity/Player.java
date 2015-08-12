@@ -26,7 +26,7 @@ public class Player extends Entity{
 	public static boolean canAttack;
 	public static float attackTime = 0;
 	public static int score = 0;
-	private final float SPEED = 8f;
+	private final float SPEED = 4f;
 	private final float ACCELERATION = 8f;
 	private PointLight light;
 	public static Array<Integer> WeaponArray;
@@ -69,12 +69,12 @@ public class Player extends Entity{
 			directionState = Direction.STILL;
 		}
 		if(Gdx.input.isKeyPressed(Keys.W) && canJump || GameScreen.Jump.contains(GameScreen.getTouch()) && canJump || GameScreen.Jump.contains(GameScreen.getTouch(1)) && canJump){
-			body.setLinearVelocity(body.getLinearVelocity().x, 2.5f);
+			body.setLinearVelocity(body.getLinearVelocity().x, 5f);
 			canJump = false;
 			jumpTime = 0;
 		}
 		else{
-			canJump = true;
+			
 		}
 		posX = body.getPosition().x;
 		posY = body.getPosition().y;

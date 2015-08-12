@@ -15,7 +15,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -108,23 +107,23 @@ public class GameScreen implements Screen {
 		throwableWeaponArray = new Array<ThrowableWeapon>();
 		pointLightArray = new Array<PointLight>();
 		ZombieArray = new Array<Zombie>();
-		rayHandler.setAmbientLight(.05f);
+		rayHandler.setAmbientLight(.35f);
 		//placing street lights
-		for(int i = -3000;i < 3000; i+=350){
+		for(int i = -3000;i < 3000; i+=400){
 			streetLight = new StreetLight(i, 165, false,rayHandler);
 			streetLight.initBox2D(world);
 			streetLightArray.add(streetLight);
 		}
 		for(int i = -5000;i < 5000; i+=350){
-//			Zombie toBeAdded = new Zombie(i, 155, player,rayHandler);
-//			toBeAdded.initBox2D(world);
-//			ZombieArray.add(toBeAdded);
+			Zombie toBeAdded = new Zombie(i, 155, player,rayHandler);
+			toBeAdded.initBox2D(world);
+			ZombieArray.add(toBeAdded);
 		}
 		ContactListenerObject = new ListenerClass();
 		world.setContactListener(ContactListenerObject);
 		house = new House(camX+20, camY-105);
 		android = Gdx.app.getType()== ApplicationType.Android ? true : false;
-		if(!android){
+		if(android){
 			Right = new Rectangle(camX, camY, view.getWorldWidth()/3, view.getWorldHeight()/2);
 			Shoot = new Rectangle(camX, camY, view.getWorldWidth()/3, view.getWorldHeight()/2);
 			Left = new  Rectangle(camX, camY, view.getWorldWidth()/3, view.getWorldHeight()/2);
@@ -136,7 +135,6 @@ public class GameScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
-		rayHandler.setAmbientLight(.3f);
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		if(!insideHouse)
@@ -318,19 +316,19 @@ public class GameScreen implements Screen {
 		
 		
 		}
-		rend.begin(ShapeType.Line);
-		rend.setColor(Color.CYAN);
-		rend.rect(house.bounds.x, house.bounds.y, house.bounds.getWidth(), house.bounds.getHeight());
-		rend.rect(Right.x, Right.y, Right.width, Right.height);
-		rend.setColor(Color.BLUE);
-		rend.rect(Left.x, Left.y, Left.width, Left.height);
-		rend.rect(Next.x, Next.y, Next.width, Next.height);
-		rend.setColor(Color.CYAN);
-		rend.rect(Previous.x, Previous.y, Previous.width, Previous.height);
-		rend.setColor(Color.BLACK);
-		rend.rect(Shoot.x, Shoot.y, Shoot.width, Shoot.height);
-		rend.rect(Jump.x, Jump.y, Jump.width, Jump.height);
-		rend.end();
+//		rend.begin(ShapeType.Line);
+//		rend.setColor(Color.CYAN);
+//		rend.rect(house.bounds.x, house.bounds.y, house.bounds.getWidth(), house.bounds.getHeight());
+//		rend.rect(Right.x, Right.y, Right.width, Right.height);
+//		rend.setColor(Color.BLUE);
+//		rend.rect(Left.x, Left.y, Left.width, Left.height);
+//		rend.rect(Next.x, Next.y, Next.width, Next.height);
+//		rend.setColor(Color.CYAN);
+//		rend.rect(Previous.x, Previous.y, Previous.width, Previous.height);
+//		rend.setColor(Color.BLACK);
+//		rend.rect(Shoot.x, Shoot.y, Shoot.width, Shoot.height);
+//		rend.rect(Jump.x, Jump.y, Jump.width, Jump.height);
+//		rend.end();
 	}//end of render
 
 	@Override

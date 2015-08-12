@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -45,7 +46,7 @@ public class Zombie extends Entity{
 			direction = Direction.LEFT;
 		else
 			direction = Direction.RIGHT;
-		eye = new PointLight(rayHandler, 64, Color.RED, 20, X, Y);
+		eye = new PointLight(rayHandler, 64, Color.RED, 10, X, Y);
 		eye.setSoft(false);
 		ID = 2;
 	}
@@ -93,11 +94,11 @@ public class Zombie extends Entity{
 			direction = Direction.STILL;
 			body.setUserData(this);
 		}
+		if(Math.abs(Math.abs(body.getAngle() * MathUtils.radiansToDegrees)-90) < 10f)
+			body.setLinearVelocity(0, body.getLinearVelocity().y);
 		eye.setPosition(posX * GameScreen.PIXELS_IN_A_METER, posY * GameScreen.PIXELS_IN_A_METER + 8);
-		eye.setDistance(10f);
-		eye.update();
 		if(!Alive)
-			eye.remove();
+			eye.setDistance(0);
 //		eye2.setPosition(posX * GameScreen.PIXELS_IN_A_METER, posY * GameScreen.PIXELS_IN_A_METER);
 //		eye2.update();
 	}
